@@ -1,6 +1,8 @@
 package com.project.viagito.viagito.controller;
 
+import com.project.viagito.viagito.model.Category;
 import com.project.viagito.viagito.model.Local;
+import com.project.viagito.viagito.repository.LocalRepository;
 import com.project.viagito.viagito.service.LocalService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,9 +15,11 @@ import java.util.Optional;
 @RequestMapping("/api/locations")
 public class LocalController {
     private final LocalService localService;
+    private final LocalRepository localRepository;
 
-    public LocalController(LocalService localService) {
+    public LocalController(LocalService localService, LocalRepository localRepository) {
         this.localService = localService;
+        this.localRepository = localRepository;
     }
 
     @PostMapping
@@ -67,5 +71,10 @@ public class LocalController {
         else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @GetMapping("/suggestions")
+    public List<Local> findSuggestedLocationsController (@RequestParam List<Category> categories, @RequestParam double userLatitude, @RequestParam double userLongitude, @RequestParam double maxKmDistance) {
+        return localService.findSuggestedLocationsService(categories, userLatitude, userLongitude, maxKmDistance);
     }
 }
