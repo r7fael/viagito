@@ -1,17 +1,22 @@
 package com.project.viagito.viagito.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
-@Id
-@GeneratedValue
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Local {
-    public int id;
-    public String name;
-    public String description;
-    public String category;
-    public String latitude;
-    public String longitude;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String name;
+    private String description;
+    @Enumerated(EnumType.STRING)
+    private Category category;
+    private Double latitude;
+    private Double longitude;
 }
