@@ -19,4 +19,5 @@ public class Local {
     private Category category;
     private Double latitude;
     private Double longitude;
+    private Double averageRating = 0.0;
 }
