@@ -7,6 +7,7 @@ import com.project.viagito.viagito.repository.LocalRepository;
 import com.project.viagito.viagito.service.JwtService;
 import com.project.viagito.viagito.service.LocalService;
 import com.project.viagito.viagito.service.ReviewService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -17,18 +18,11 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/locations")
+@RequiredArgsConstructor
 public class LocalController {
     private final LocalService localService;
-    private final LocalRepository localRepository;
-    private final JwtService jwtService;
     private final ReviewService reviewService;
 
-    public LocalController(LocalService localService, LocalRepository localRepository, JwtService jwtService, ReviewService reviewService) {
-        this.localService = localService;
-        this.localRepository = localRepository;
-        this.jwtService = jwtService;
-        this.reviewService = reviewService;
-    }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
