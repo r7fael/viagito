@@ -28,13 +28,14 @@ public class PreferenceService {
         return cityRepository.findAll();
     }
 
-    public UserPreference saveUpdatePreferences (User user, Long cityId, int distance) {
+    public UserPreference saveUpdatePreferencesService(User user, Long cityId, int distance) {
         City city = cityRepository.findById(cityId).orElseThrow(() -> new RuntimeException("Cidade não encontrada."));
 
         UserPreference userPreference = userPreferenceRespository.findByUser(user).orElse(new UserPreference());
         userPreference.setUser(user);
         userPreference.setCity(city);
         userPreference.setMaxDistanceKm(distance);
+        user.setUserPreference(userPreference);
 
         return userPreferenceRespository.save(userPreference);
     }
