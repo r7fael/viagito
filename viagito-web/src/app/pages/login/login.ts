@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -12,14 +13,15 @@ import { AuthService } from '../../services/auth';
     ReactiveFormsModule 
   ],
   templateUrl: './login.html',
-  styleUrls: ['./login.scss']
+  styleUrls: ['./login.css']
 })
 export class Login {
   loginForm: FormGroup;
 
   constructor(
     private fb: FormBuilder,
-    private authService: AuthService
+    private authService: AuthService,
+    private router: Router
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -36,6 +38,9 @@ export class Login {
       .subscribe({
         next: (response) => {
           console.log('Token:', response.token);
+          localStorage.setItem('authToken', response.token);
+
+          this.router.navigate(['/dashboard']);
         },
         error: (err) => {
           console.error('Erro no login:', err);
