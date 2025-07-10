@@ -16,4 +16,6 @@ public class City {
     private long id;
     private String name;
     private String state;
+    private Double latitude;
+    private Double longitude;
 }
