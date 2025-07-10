@@ -20,4 +20,7 @@ public class Local {
     private Double latitude;
     private Double longitude;
     private Double averageRating = 0.0;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "city_id", nullable = false)
+    private City city;
 }
