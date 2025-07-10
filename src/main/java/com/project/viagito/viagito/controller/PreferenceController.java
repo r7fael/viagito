@@ -9,6 +9,7 @@ import com.project.viagito.viagito.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -43,11 +44,11 @@ public class PreferenceController {
     }
 
     @PostMapping
-    public ResponseEntity<UserPreferenceResponseDTO> saveUserPreferencesController(
-            @RequestBody UserPreferenceRequestDTO requestDTO,
-            @AuthenticationPrincipal User currentUser) {
+    public ResponseEntity<UserPreferenceResponseDTO> saveUserPreferencesController(@RequestBody UserPreferenceRequestDTO requestDTO, @AuthenticationPrincipal UserDetails userDetails) {
 
-        UserPreference savedPreference = preferenceService.saveUpdatePreferences(currentUser, requestDTO.getCityId(), requestDTO.getDistance());
+        User currentUser = (User) userService.loadUserByUsername(userDetails.getUsername());
+
+        UserPreference savedPreference = preferenceService.saveUpdatePreferencesService(currentUser, requestDTO.getCityId(), requestDTO.getDistance());
 
         UserPreferenceResponseDTO responseDTO = new UserPreferenceResponseDTO(savedPreference);
 
