@@ -1,0 +1,62 @@
+<div class="dashboard-container">
+
+  <div *ngIf="!completeConfig" class="setup-form">
+    <h2>Bem-vindo(a) ao Viagito!</h2>
+    <p>Para começar, precisamos de algumas informações.</p>
+
+    <form [formGroup]="setupForm" (ngSubmit)="onSubmitSetup()">
+      
+      <div class="form-group">
+        <label for="city-select">Onde você quer montar seu roteiro?</label>
+        <select id="city-select" formControlName="city">
+          <option value="" disabled>Selecione uma cidade</option>
+          <option *ngFor="let city of cities" [value]="city.id">
+            {{ city.name }} - {{ city.state }}
+          </option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="distance">Até que distância você quer explorar? ({{ setupForm.value.distance }} km)</label>
+        <input id="distance" type="range" formControlName="distance" min="1" max="100">
+      </div>
+
+      <button type="submit" [disabled]="setupForm.invalid">
+        Começar a Explorar
+      </button>
+    </form>
+  </div>
+
+  <div *ngIf="completeConfig" class="main-dashboard">
+    <div class="sidebar">
+      <h2>Monte seu Roteiro</h2>
+      <form [formGroup]="roadmapForm" (ngSubmit)="onSubmitRoadmap()">
+        <div class="form-group">
+          <label>Selecione as categorias:</label>
+          <div class="category-list">
+            <div *ngFor="let category of availableCategories" class="category-item">
+              <input type="checkbox" [id]="category" [value]="category" (change)="onCategoryChange($event)">
+              <label [for]="category">{{ category | titlecase }}</label>
+            </div>
+          </div>
+        </div>
+        <button type="submit" [disabled]="roadmapForm.invalid">Gerar Sugestões</button>
+      </form>
+      
+      <hr>
+      
+      <h3>Locais Sugeridos</h3>
+      <ul class="locations-list">
+        <li *ngFor="let local of suggestedLocales">
+          <strong>{{ local.name }}</strong>
+          <p>{{ local.description }}</p>
+        </li>
+      </ul>
+    </div>
+
+    <div class="map-container">
+      <div id="map"></div>
+    </div>
+  </div>
+
+</div>
