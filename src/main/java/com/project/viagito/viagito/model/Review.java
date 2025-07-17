@@ -1,5 +1,6 @@
 package com.project.viagito.viagito.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,10 +17,13 @@ public class Review {
     private double rating;
     @Column (columnDefinition = "TEXT")
     private String comment;
-    @ManyToOne
-    @JoinColumn (name = "user.id", nullable = false)
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn (name = "user_id", nullable = false)
     private User user;
-    @ManyToOne
-    @JoinColumn (name = "local.id", nullable = false)
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
+    @JoinColumn (name = "local_id", nullable = false)
     private Local local;
 }
