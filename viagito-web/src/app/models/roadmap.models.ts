@@ -9,4 +9,5 @@ export interface LocalResponse {
   category: string;
   latitude: number;
   longitude: number;
+  averageRating: number;
 }
