@@ -93,7 +93,7 @@ public class LocalController {
     }
 
     @GetMapping("/{localId}/reviews")
-    public List<Review> getReviewsForLocalController(@PathVariable Long localId) {
+    public List<ReviewDTO> getReviewsForLocalController(@PathVariable Long localId) {
         return reviewService.getReviewsByLocalService(localId);
     }
 }
