@@ -1,5 +1,6 @@
 package com.project.viagito.viagito.service;
 
+import com.project.viagito.viagito.controller.ReviewDTO;
 import com.project.viagito.viagito.model.Local;
 import com.project.viagito.viagito.model.Review;
 import com.project.viagito.viagito.model.User;
@@ -21,35 +22,38 @@ public class ReviewService {
         this.userRepository = userRepository;
         this.reviewRepository = reviewRepository;
     }
-
     public Review createReviewService(Long localId, String userEmail, Review review) {
         User user = userRepository.findByEmail(userEmail).orElseThrow(() -> new RuntimeException("Usuário não encontrado."));
         Local local = localRepository.findById(localId).orElseThrow(() -> new RuntimeException("Local não encontrado."));
 
         review.setUser(user);
         review.setLocal(local);
+        Review savedReview = reviewRepository.save(review);
 
         List<Review> reviews = reviewRepository.findByLocalId(localId);
 
-        double reviewsSum = 0;
-
-        for (Review rev : reviews) {
-            reviewsSum += rev.getRating();
+        double totalRating = 0.0;
+        for (Review r : reviews) {
+            totalRating += r.getRating();
         }
 
-        double average = 0;
-        if (!reviews.isEmpty()) {
-            average = reviewsSum /reviews.size();
+        double average;
+        if (reviews.isEmpty()) {
+            average = 0.0;
+        }
+        else {
+            average = totalRating / reviews.size();
         }
 
         local.setAverageRating(average);
-
         localRepository.save(local);
 
-        return  reviewRepository.save(review);
+        return savedReview;
     }
 
-    public List<Review> getReviewsByLocalService(Long localId) {
-        return reviewRepository.findByLocalId(localId);
+    public List<ReviewDTO> getReviewsByLocalService(Long localId) {
+        return reviewRepository.findByLocalId(localId).stream()
+                .map(r -> new ReviewDTO(r.getId(), r.getRating(), r.getComment(), r.getUser().getName()))
+                .toList();
     }
 }
